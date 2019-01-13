@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Welcome--WorkGether</title>
+<link rel="stylesheet" type="text/css" href="login.css" />
+<script type="text/javascript" src="../cookie.js"></script>
+</head>
+<body>
+
+
+<div class="header">
+	<div class="image">
+		<img src="login_pic.png">
+	</div>
+	<label class="headertext">工 作 任 务 管 理 系 统</label>
+</div>
+
+<div class="divForm">
+
+<div class="div divLogin">
+	<div class="login">
+		<h2 style="color: white; height: 30px;margin:0">Welcome</h2>
+	</div>
+
+	<div class="div divIdentity">
+		<div class="btnGuanLiYuanDengLu identity" id="gly">管理员登录</div>
+		<div style="border-bottom: 1px solid #3399ff;width: 5px;height:25px; float: left;"></div>
+		<div class="btnYuanGongDengLu identity" id="yg">员工登录</div>
+	</div>
+
+	<script type="text/javascript">
+		document.getElementById("gly").onclick=function(){
+			document.getElementById("gly").style.background="white";
+			document.getElementById("yg").style.background="#3399ff";
+			document.getElementById("type").value="1";
+		}
+		document.getElementById("yg").onclick=function(){
+			document.getElementById("gly").style.background="#3399ff";
+			document.getElementById("yg").style.background="white";
+			document.getElementById("type").value="2";
+		}
+	</script>
+
+	<input type="text" name="type" id="type" style="width: 0;height: 0;margin:0;border: none;padding: 0;" value="2">
+
+	<br><br>
+
+	<div class="divInput">
+		<label class="labAccount div">账号(Account)：</label>
+		<input type="text" id="account" class="inputAccount div"><br>
+
+		<label class="labPassword div">密码(Password)：</label><br>
+		<input type="password" id="password" class="inputPassword div" style=""><br>
+	
+		<p id="result" style="font-size:10px;color:orange;margin:0 15px;"></p>
+	</div>
+
+
+	<button onclick="login()" class="btnSubmit">登录</button>
+	<a style="text-align:center;width:100%;font-size:10px;color:#3399ff;float:right;" href="register.jsp" target="_self">注册</a>
+</div>
+</div>
+
+<div class="tail">
+	<h6 class="tailtext">COPYRIGHT © 2018 XiaoMing All Rights Reserved.</h6>
+</div>
+
+<script>
+	var req;
+
+	function login(){
+		//获取表单提交的内容  
+    	var account = document.getElementById("account");  
+    	var password=document.getElementById("password");
+    	var type=document.getElementById("type");    
+    	
+    	var url = "Login.jsp?type=" + escape(type.value);                  
+    	//创建一个XMLHttpRequest对象req  
+    	if(window.XMLHttpRequest) {  
+    	    //IE7, Firefox, Opera支持  
+        	req = new XMLHttpRequest();  
+    	}else if(window.ActiveXObject) {  
+   	     	//IE5,IE6支持  
+        	req = new ActiveXObject("Microsoft.XMLHTTP");  
+    	}  
+    	 
+    	req.open("POST", url, true);  
+    	//onreadystatechange属性存有处理服务器响应的函数,有5个取值分别代表不同状态 
+    	req.setRequestHeader("Content-type","application/x-www-form-urlencoded"); 
+    	req.onreadystatechange = callback;  
+    	//send函数发送请求  
+    	req.send("account="+account.value+"&password="+password.value);
+	}
+	
+	function callback() {  
+    	if(req.readyState == 4 && req.status == 200) {  
+        	var check = req.responseText;
+        	console.log(check); 
+        	if(check=="账号错误"||check=="密码错误")document.getElementById("result").innerHTML=check;
+        	else {
+        		setCookie("skey",check,2);
+        		window.location.href="../task/task.jsp";
+        		}
+    	}  
+	}  	
+</script>
+
+</body>
+</html>
